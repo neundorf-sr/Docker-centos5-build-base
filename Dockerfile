@@ -17,10 +17,15 @@ RUN yum update -y && \
 
 
 # install cmake
+RUN mkdir -p /tmp/dl
+
+COPY ./cmake-3.1.3-Linux-x86_64.tar.gz /tmp/dl/
+COPY ./cmake-3.6.3-Linux-x86_64.tar.gz /tmp/dl/
+
 WORKDIR /opt
-RUN mkdir -p /tmp/dl && \
-    wget -P /tmp/dl --no-check-certificate https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.tar.gz && \
-    wget -P /tmp/dl --no-check-certificate https://cmake.org/files/v3.1/cmake-3.1.3-Linux-x86_64.tar.gz && \
-    tar -zxvf /tmp/dl/cmake-3.6.3-Linux-x86_64.tar.gz && \
+#RUN mkdir -p /tmp/dl && \
+#    wget -P /tmp/dl --no-check-certificate https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.tar.gz && \
+#   wget -P /tmp/dl --no-check-certificate https://cmake.org/files/v3.1/cmake-3.1.3-Linux-x86_64.tar.gz &&
+RUN tar -zxvf /tmp/dl/cmake-3.6.3-Linux-x86_64.tar.gz && \
     tar -zxvf /tmp/dl/cmake-3.1.3-Linux-x86_64.tar.gz && \
     rm /tmp/dl/*
