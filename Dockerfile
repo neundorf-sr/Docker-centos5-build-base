@@ -29,3 +29,16 @@ WORKDIR /opt
 RUN tar -zxvf /tmp/dl/cmake-3.6.3-Linux-x86_64.tar.gz && \
     tar -zxvf /tmp/dl/cmake-3.1.3-Linux-x86_64.tar.gz && \
     rm /tmp/dl/*
+
+# Install newer binutils (2.25)
+# Revert some Fedora specific changes to allow building on CentOS
+RUN wget -q https://kojipkgs.fedoraproject.org//packages/binutils/2.25.1/9.fc24/src/binutils-2.25.1-9.fc24.src.rpm && \
+    rpm -i --nomd5 binutils-2.25.1-9.fc24.src.rpm && \
+    rm -f binutils-2.25.1-9.fc24.src.rpm && \
+    cd /usr/src/redhat/SPECS && \
+    sed -i 's/zlib-static/zlib/' binutils.spec && \
+    sed -i 's/glibc-static/glibc/' binutils.spec && \
+    sed -i 's/libstdc++-static/libstdc++/' binutils.spec && \
+    rpmbuild -bb binutils.spec && \
+    yum -y localinstall --nogpgcheck ../RPMS/x86_64/binutils-2.25.1-9.x86_64.rpm && \
+    rm -rf /usr/src/redhat/
